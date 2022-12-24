@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BlockControl : MonoBehaviour
 {
+    //define variable
     public Vector3 RotationPoint;
     public static int height = 20;
     public static int width = 10;
@@ -17,7 +16,8 @@ public class BlockControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.RightArrow))
+        // move to left, if block move to out of background, location is restored 
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             transform.position += new Vector3(1, 0, 0);
             if (!VaildMove())
@@ -26,7 +26,9 @@ public class BlockControl : MonoBehaviour
 
             }
         }
-        if(Input.GetKeyDown(KeyCode.LeftArrow))
+
+        // move to right, if block move to out of background, location is restored
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             transform.position -= new Vector3(1, 0, 0);
             if (!VaildMove())
@@ -34,31 +36,36 @@ public class BlockControl : MonoBehaviour
                 transform.position += new Vector3(1, 0, 0);
             }
         }
-        if(Input.GetKeyDown(KeyCode.DownArrow))
+
+        // Block's moved down by pressing downArrow
+        if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             transform.position -= new Vector3(0, 1, 0);
-            if(!VaildMove())
+            if (!VaildMove())
             {
                 transform.position += new Vector3(0, 1, 0);
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        // change rotation, if block move to out of background, location is restored
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             transform.RotateAround(transform.TransformPoint(RotationPoint),
                 new Vector3(0, 0, 1), 90);
-            if(!VaildMove())
+            if (!VaildMove())
             {
                 transform.RotateAround(transform.TransformPoint(RotationPoint),
                     new Vector3(0, 0, 1), -90);
             }
         }
 
-        if(pivotTime < delayTime)
+        // make delay for slow down
+        if (pivotTime < delayTime)
         {
             GravityDown();
             pivotTime += 0.2f;
-        } else
+        }
+        else
         {
             delayTime += Time.deltaTime;
         }
@@ -66,6 +73,7 @@ public class BlockControl : MonoBehaviour
 
     }
 
+    // block move down without pressing a key 
     void GravityDown()
     {
         if (VaildMove())
@@ -100,9 +108,10 @@ public class BlockControl : MonoBehaviour
 
     }
 
+    // check a block is in background
     bool VaildMove()
     {
-        foreach(Transform Children in transform)
+        foreach (Transform Children in transform)
         {
             int locationX = Mathf.FloorToInt(Children.transform.position.x);
             int locationY = Mathf.FloorToInt(Children.transform.position.y);
@@ -122,11 +131,12 @@ public class BlockControl : MonoBehaviour
     }
 
 
+    // to indicate occupied space in background
     void AddOccupy()
     {
         int locationX;
         int locationY;
-        foreach(Transform Children in transform)
+        foreach (Transform Children in transform)
         {
             locationX = Mathf.FloorToInt(Children.position.x);
             locationY = Mathf.FloorToInt(Children.position.y);
@@ -136,35 +146,38 @@ public class BlockControl : MonoBehaviour
         }
     }
 
+    // check the target line has "null" value
     bool CheckLine(int targetLine)
     {
-        
-        for(int i=0; i<width; i++)
+
+        for (int i = 0; i < width; i++)
         {
-            if(occupied[i, targetLine] == null)
+            if (occupied[i, targetLine] == null)
             {
                 return false;
             }
         }
-        
+
 
         return true;
     }
 
+    // delete the target line's game object 
     void deleteLine(int targetLine)
     {
-        for(int i=0; i < width; i++)
+        for (int i = 0; i < width; i++)
         {
             Destroy(occupied[i, targetLine].gameObject);
             occupied[i, targetLine] = null;
         }
     }
 
+    // the blocks located in over deleted blocks move down
     void RowDown(int targetLine)
     {
-        for (int i=targetLine; i<height; i++)
+        for (int i = targetLine; i < height; i++)
         {
-            for(int j=0; j<width; j++)
+            for (int j = 0; j < width; j++)
             {
                 if (occupied[j, i] != null)
                 {
@@ -172,20 +185,21 @@ public class BlockControl : MonoBehaviour
                     occupied[j, i] = null;
                     occupied[j, i - 1].transform.position -= new Vector3(0, 1, 0);
                 }
-             }
+            }
         }
     }
 
+    // if height is higher than 18, game over
     void JudgeGameOver()
     {
-        foreach(Transform Children in transform)
+        foreach (Transform Children in transform)
         {
-            if(Mathf.FloorToInt(Children.position.y) >= 18)
+            if (Mathf.FloorToInt(Children.position.y) >= 18)
             {
                 gameOver = true;
             }
         }
     }
 
-    
+
 }
