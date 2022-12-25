@@ -1,5 +1,7 @@
 using UnityEngine;
 
+
+
 public class BlockControl : MonoBehaviour
 {
     //define variable
@@ -19,10 +21,9 @@ public class BlockControl : MonoBehaviour
         // move to left, if block move to out of background, location is restored 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            transform.position += new Vector3(1, 0, 0);
-            if (!VaildMove())
+            if (RightVaildMove())
             {
-                transform.position -= new Vector3(1, 0, 0);
+                transform.position += new Vector3(1, 0, 0);
 
             }
         }
@@ -30,20 +31,18 @@ public class BlockControl : MonoBehaviour
         // move to right, if block move to out of background, location is restored
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            transform.position -= new Vector3(1, 0, 0);
-            if (!VaildMove())
+            if (LeftVaildMove())
             {
-                transform.position += new Vector3(1, 0, 0);
+                transform.position -= new Vector3(1, 0, 0);
             }
         }
 
         // Block's moved down by pressing downArrow
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            transform.position -= new Vector3(0, 1, 0);
-            if (!VaildMove())
+            if (VerticalVaildMove())
             {
-                transform.position += new Vector3(0, 1, 0);
+                transform.position -= new Vector3(0, 1, 0);
             }
         }
 
@@ -76,20 +75,19 @@ public class BlockControl : MonoBehaviour
     // block move down without pressing a key 
     void GravityDown()
     {
-        if (VaildMove())
+        if (VerticalVaildMove())
         {
             transform.position -= new Vector3(0, 1, 0);
         }
         else
         {
-            transform.position += new Vector3(0, 1, 0);
             JudgeGameOver();
             AddOccupy();
             foreach (Transform Children in transform)
             {
                 if (CheckLine(Mathf.FloorToInt(Children.position.y)))
                 {
-                    deleteLine(Mathf.FloorToInt(Children.position.y));
+                    DeleteLine(Mathf.FloorToInt(Children.position.y));
                     RowDown(Mathf.FloorToInt(Children.position.y));
                 }
             }
@@ -108,7 +106,6 @@ public class BlockControl : MonoBehaviour
 
     }
 
-    // check a block is in background
     bool VaildMove()
     {
         foreach (Transform Children in transform)
@@ -127,6 +124,71 @@ public class BlockControl : MonoBehaviour
             }
 
         }
+        return true;
+    }
+
+    // check a block is in background
+    bool VerticalVaildMove()
+    {
+        foreach (Transform Children in transform)
+        {
+            int locationX = Mathf.FloorToInt(Children.transform.position.x);
+            int locationY = Mathf.FloorToInt(Children.transform.position.y - 1);
+
+            if (locationY < 0 || locationY >= height)
+            {
+                return false;
+            }
+
+            if (occupied[locationX, locationY] != null)
+            {
+                return false;
+            }
+
+        }
+        return true;
+    }
+
+    bool LeftVaildMove()
+    {
+        foreach(Transform Children in transform)
+        {
+            int leftLocationX = Mathf.FloorToInt(Children.transform.position.x - 1);
+            int locationY = Mathf.FloorToInt(Children.transform.position.y);
+
+            if (leftLocationX < 0)
+            {
+                return false;
+            }
+
+            if (occupied[leftLocationX, locationY]  != null)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    bool RightVaildMove()
+    {
+        foreach (Transform Children in transform)
+        {
+            int rightLocationX = Mathf.FloorToInt(Children.transform.position.x + 1);
+            int locationY = Mathf.FloorToInt(Children.transform.position.y);
+
+            if (rightLocationX >= width)
+            {
+                return false;
+            }
+
+            if (occupied[rightLocationX, locationY] != null)
+            {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -163,7 +225,7 @@ public class BlockControl : MonoBehaviour
     }
 
     // delete the target line's game object 
-    void deleteLine(int targetLine)
+    void DeleteLine(int targetLine)
     {
         for (int i = 0; i < width; i++)
         {
