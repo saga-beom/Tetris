@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 
@@ -14,22 +15,24 @@ public class GameManager : MonoBehaviour
     public GameObject gameoverPanel;
     private Vector3 spawnLocation = new(5.5f, 17.5f, 0);
     private GameObject currentBlock;
-    private int gameScore = 0;
+    public static int gameScore = 0;
   
 
     private Transform[,] occupied = new Transform[width, height];
+    public TMP_Text text;
 
     void Start()
     {
         currentBlock = Instantiate(Tetris[Random.Range(0, Tetris.Length)], spawnLocation, Quaternion.identity);
         gameoverPanel.SetActive(false);
-        gameScore = 0;
+        text.text = gameScore.ToString();
     }
 
 
     // Update is called once per frame
     void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             MoveRight();
@@ -262,6 +265,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < width; i++)
         {
             gameScore += 100;
+            text.text = gameScore.ToString();
             Destroy(occupied[i, targetLine].gameObject);
             occupied[i, targetLine] = null;
         }
