@@ -482,6 +482,7 @@ MonoBehaviour:
   - {fileID: 5747273239940898100, guid: ce4ba0461f005460ba1ea12a91ef7ebb, type: 3}
   - {fileID: 5017973294228421537, guid: 0870de974583e4a019edb2a5144074b0, type: 3}
   gameoverPanel: {fileID: 860421517}
+  text: {fileID: 398154066}
 --- !u!1 &398154064
 GameObject:
   m_ObjectHideFlags: 0
