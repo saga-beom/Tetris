@@ -11,8 +11,10 @@ public class GameManager : MonoBehaviour
     public float pivotTime = 0.1f;
     public float delayTime = 0.2f;
     public GameObject[] Tetris;
+    public GameObject gameoverPanel;
     private Vector3 spawnLocation = new(5.5f, 17.5f, 0);
     private GameObject currentBlock;
+    private int gameScore = 0;
   
 
     private Transform[,] occupied = new Transform[width, height];
@@ -20,6 +22,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         currentBlock = Instantiate(Tetris[Random.Range(0, Tetris.Length)], spawnLocation, Quaternion.identity);
+        gameoverPanel.SetActive(false);
+        gameScore = 0;
     }
 
 
@@ -257,6 +261,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < width; i++)
         {
+            gameScore += 100;
             Destroy(occupied[i, targetLine].gameObject);
             occupied[i, targetLine] = null;
         }
@@ -286,6 +291,7 @@ public class GameManager : MonoBehaviour
         {
             if (Mathf.FloorToInt(Children.position.y) >= 18)
             {
+                gameoverPanel.SetActive(true);
                 return true;
             }
         }
