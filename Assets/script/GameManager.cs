@@ -296,6 +296,7 @@ public class GameManager : MonoBehaviour
             if (Mathf.FloorToInt(Children.position.y) >= 18)
             {
                 gameoverPanel.SetActive(true);
+                this.enabled = false;
                 return true;
             }
         }

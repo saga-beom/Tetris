@@ -8,6 +8,5 @@ public class StartGame : MonoBehaviour
     public void StartBtn()
     {
         SceneManager.LoadScene("MainGame");
-        GameManager.gameScore = 0;
     }
 }
