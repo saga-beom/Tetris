@@ -549,8 +549,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RotationPoint: {x: 0, y: 0, z: 0}
-  pivotTime: 0.1
-  delayTime: 0.2
+  height: 20
+  width: 10
+  pivotTime: 0.25
+  delayTime: 0.1
   Tetris:
   - {fileID: 5156994083593581496, guid: 437c3ecd98fd6408ab4e4e9dd34ddac4, type: 3}
   - {fileID: 3077203934438667132, guid: 85f0994dccebe4f269614c1771b96b7c, type: 3}

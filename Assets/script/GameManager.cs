@@ -7,18 +7,18 @@ public class GameManager : MonoBehaviour
 {
     //define variable
     public Vector3 RotationPoint;
-    public static int height = 20;
-    public static int width = 10;
-    public float pivotTime = 0.1f;
-    public float delayTime = 0.2f;
+    public int height = 20;
+    public int width = 10;
+    public float pivotTime = 0.25f;
+    public float delayTime = 0.1f;
     public GameObject[] Tetris;
     public GameObject gameoverPanel;
     private Vector3 spawnLocation = new(5.5f, 18.5f, 0);
     private GameObject currentBlock;
-    public static int gameScore = 0;
+    private int gameScore = 0;
   
 
-    private Transform[,] occupied = new Transform[width, height];
+    private Transform[,] occupied = new Transform[10, 20];
     public TMP_Text text;
 
     void Start()
@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    // Update is called once per frame
+// Update is called once per frame
     void Update()
     {
 
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
         if (pivotTime < delayTime)
         {
             GravityDown();
-            pivotTime += 0.2f;
+            delayTime = 0.1f;
         }
         else
         {
